@@ -1,23 +1,20 @@
+import json
 import requests
-import pyttsx3 as speaker
 
-engine = speaker.init()
+API_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Lake%20Country%2C%20Kelowna/today?unitGroup=metric&key=9YZXSLJYPJGRMQDFKJW5G2QMQ&contentType=json"
+filename = "weatherData.json"
 
 
-api_key = "d8b9c8b8c3254a278d2a6b361f0e157a"
-city = "Hamburg"
-country_code = "DE"
-url = f'https://api.weatherbit.io/v2.0/current?city={city}&country={country_code}&key={api_key}'
+def download_json(api_url):
+    r = requests.get(api_url)
+    with open(filename, "wb") as f:
+        f.write(r.content)
 
-response = requests.get(url)
+download_json(API_URL)
 
-if response.status_code == 200:
-    data = response.json()
-    weather_data = data['data'][0]
 
-    city_name = weather_data['city_name']
-    temperature = weather_data['temp']
-    weather_info = weather_data['weather']['description']
+with open(filename, "r") as file:
+    data = json.load(file)
 
-    engine.say(f"In {city_name} hat es im Moment {temperature}")
-    engine.runAndWait()
+maxTemp = data["days"][0]["tempmax"]
+print(maxTemp)
