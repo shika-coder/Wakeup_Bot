@@ -21,15 +21,23 @@ last_checked_time = datetime.date.today()
 
 download_json(API_URL)
 
-def print_data():
+def print_data(x):
     with open(weather_json, "r") as file:
         data = json.load(file)
 
+    date = data ["days"][0]["datetime"]
     max_temp = data["days"][0]["tempmax"]
     min_temp = data["days"][0]["tempmin"]
+    feelmax_temp = data["days"][0]["feelslikemax"]
+    feelmin_temp = data["days"][0]["feelslikemin"]
+    print(date)
 
-    print(f"Temperature: {min_temp} - {max_temp}")
-
+    if x == "f":
+        print(f"Temperature: {min_temp * 9/5 + 32} - {max_temp * 9/5 + 32} °F")
+        print(f"Temperature feels like: {feelmin_temp * 9/5 + 32} - {feelmax_temp * 9/5 + 32} °C")
+    else:
+        print(f"Temperature: {min_temp} - {max_temp} °C")
+        print(f"Temperature feels like: {feelmin_temp} - {feelmax_temp} °C")
 
 
 
@@ -45,7 +53,7 @@ while True:
         print("Waiting for change...")
         time.sleep(60)
 
+    #main logic here -->
     else:
-        print_data()
+        print_data(input("f or c: "))
         break 
-    
